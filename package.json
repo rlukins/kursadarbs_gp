@@ -1,0 +1,29 @@
+{
+  "name": "shader1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node_modules/.bin/parcel src/index.html",
+    "build": "node_modules/.bin/parcel build"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Reinis Lūkins",
+  "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "dependencies": {
+    "box2dnode": "^2.0.0",
+    "live-server": "^1.2.1",
+    "parcel": "^1.12.4",
+    "textures": "^1.2.2",
+    "three": "^0.127.0"
+  },
+  "devDependencies": {}
+}
