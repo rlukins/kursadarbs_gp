@@ -1,11 +1,17 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls';
+import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import carModel from './assets/car2.gltf';
 
 class Main {
     uniforms;
     constructor() {
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+        //this.pointerControls = new THREE.PointerLockControls(this.camera);
+
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(0xEEEEEE);
@@ -16,11 +22,15 @@ class Main {
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.clock = new THREE.Clock();
 
+        this.loader = new GLTFLoader();
+
         this.createLights();
         this.clock = new THREE.Clock();
         this.setupEvents();
         this.createShader();
         this.createWorld();
+        this.createFloor();
+        this.createCar();
         this.animate();
     }
 
@@ -72,11 +82,36 @@ class Main {
         });
 
         var cube = new THREE.Mesh(geometry, material);
+        cube.position.set(0, 0.5, 0);
         this.scene.add(cube);
+    }
+
+    createFloor() {
+        const floorgeometry = new THREE.PlaneGeometry(10, 10, 1, 1);
+        const floormaterial = new THREE.MeshBasicMaterial({ color: 0x888888 });
+        const floor = new THREE.Mesh(floorgeometry, floormaterial);
+        floor.material.side = THREE.DoubleSide;
+        floor.rotation.x = Math.PI / 2;
+        floor.rotation.y = 0;
+        floor.rotation.z = 0;
+        this.scene.add(floor);
     }
 
     createLights() {
         this.scene.add(new THREE.AmbientLight(0x777777));
+    }
+
+    createCar() {
+        this.loader.load(carModel, (gltf) => {
+            this.car = gltf.scene;
+            this.car.scale.x = 0.5;
+            this.car.scale.y = 0.5;
+            this.car.scale.z = 0.5;
+            this.car.position.set(0, 0, 2);
+            this.scene.add(this.car);
+        }, undefined, function (error) {
+            console.error(error);
+        });
     }
 
     createShader() {
